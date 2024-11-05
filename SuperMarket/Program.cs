@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperMarket
 {
@@ -120,7 +116,14 @@ namespace SuperMarket
             int totalPriceProducts = buyer.CalculateTotalPriceProductsInCart();
             TakeMoneyForGoods(totalPriceProducts);
 
-            Console.WriteLine($"\nПриключенец купил товар на сумму {totalPriceProducts} золотых.\n");
+            if (totalPriceProducts > 0)
+            {
+                Console.WriteLine($"\nПриключенец купил товар на сумму {totalPriceProducts} золотых.\n");
+            }
+            else
+            {
+                Console.WriteLine("\nПриключенец ушел");
+            }
         }
     }
 
@@ -181,15 +184,22 @@ namespace SuperMarket
         {
             while (_money < CalculateTotalPriceProductsInCart())
             {
-                RejectionGoods();
+                RemoveRandomProduct();
             }
         }
 
-        public void RejectionGoods()
+        private void RemoveRandomProduct()
         {
-                int indexProduct = UserUtils.GenerateRandomNumber(_cart.Count);
-                Console.WriteLine($"\nУ приключенца не хватило золота и он отказывается от товара {_cart[indexProduct].Name}");
-                _cart.RemoveAt(indexProduct);
+            //if (_cart.Count >= 1)
+            //{
+            int indexProduct = UserUtils.GenerateRandomNumber(_cart.Count);
+            Console.WriteLine($"\nУ приключенца не хватило золота и он отказывается от товара {_cart[indexProduct].Name}");
+            _cart.RemoveAt(indexProduct);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Приключенец ничего не купил.");
+            //}
         }
 
         private void PayForProduct(int money)
