@@ -117,7 +117,7 @@ namespace SuperMarket
 
         private void MakeDeal(Buyer buyer)
         {
-            int totalPriceProducts = buyer.GetTotalPriceProductsInCart();
+            int totalPriceProducts = buyer.CalculateTotalPriceProductsInCart();
             TakeMoneyForGoods(totalPriceProducts);
 
             Console.WriteLine($"\nПриключенец купил товар на сумму {totalPriceProducts} золотых.\n");
@@ -151,7 +151,7 @@ namespace SuperMarket
 
         public void MakeDeal()
         {
-            PayForProduct(GetTotalPriceProductsInCart());
+            PayForProduct(CalculateTotalPriceProductsInCart());
             MoveGoods();
         }
 
@@ -162,10 +162,10 @@ namespace SuperMarket
                 Console.WriteLine($"{_cart[i].Name}");
             }
 
-            Console.WriteLine($"\nна сумму {GetTotalPriceProductsInCart()} золотых.");
+            Console.WriteLine($"\nна сумму {CalculateTotalPriceProductsInCart()} золотых.");
         }
 
-        public int GetTotalPriceProductsInCart()
+        public int CalculateTotalPriceProductsInCart()
         {
             int totalPrice = 0;
 
@@ -179,22 +179,22 @@ namespace SuperMarket
 
         public void VerifyIsEnoughMoney()
         {
-            while (_money < GetTotalPriceProductsInCart())
+            while (_money < CalculateTotalPriceProductsInCart())
             {
+                RejectionGoods();
+            }
+        }
+
+        public void RejectionGoods()
+        {
                 int indexProduct = UserUtils.GenerateRandomNumber(_cart.Count);
                 Console.WriteLine($"\nУ приключенца не хватило золота и он отказывается от товара {_cart[indexProduct].Name}");
-                RemoveProduct(indexProduct);
-            }
+                _cart.RemoveAt(indexProduct);
         }
 
         private void PayForProduct(int money)
         {
             _money -= money;
-        }
-
-        private void RemoveProduct(int indexProduct)
-        {
-            _cart.RemoveAt(indexProduct);
         }
 
         private void MoveGoods()
